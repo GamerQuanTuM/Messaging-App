@@ -5,7 +5,7 @@ import { BsFillSendFill } from "react-icons/bs"
 import { Timestamp, arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore"
 import { db } from "../firebase"
 import useAuthStore from "../store/Auth"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 type Props = {
     getUserById: string | null,
@@ -22,6 +22,7 @@ type TextMessage = {
 
 const Messages = ({ getUserById, messageUser }: Props) => {
     const { currentUser } = useAuthStore()
+    const ref = useRef<HTMLDivElement>(null);
 
     const [text, setText] = useState("")
     const [messageTexts, setMessageTexts] = useState<TextMessage[]>([]);
@@ -54,6 +55,11 @@ const Messages = ({ getUserById, messageUser }: Props) => {
             unsubscribeRecipient();
         };
     }, [currentUser, getUserById]);
+
+    useEffect(() => {
+        ref.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messageTexts]);
+
 
 
 
@@ -109,7 +115,7 @@ const Messages = ({ getUserById, messageUser }: Props) => {
             <hr className="" />
             <div className="flex-1 overflow-y-auto scrollbar mt-5">
                 {messageTexts?.map((message: TextMessage, i: number) => (
-                    <div key={i} className={message.senderId === currentUser?.uid ? 'sent' : 'received mt-[10px]'}>
+                    <div key={i} className={message.senderId === currentUser?.uid ? 'sent' : 'received mt-[10px]'}  ref={ref}>
                         <div className="message-container relative">
                             <img src={message.senderId === currentUser?.uid ? currentUser?.photoURL! : messageUser?.photoURL} className="user-image" alt="User" />
                             {message?.senderId === getUserById && <p className="text-[10px] text-[#9ba2a8] absolute left-[70px] -top-2">{message?.timestamp.toDate().toLocaleDateString()} {message?.timestamp.toDate().toLocaleTimeString()}</p>}
