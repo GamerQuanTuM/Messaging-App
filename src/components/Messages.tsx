@@ -55,7 +55,6 @@ const Messages = ({ getUserById, messageUser }: Props) => {
         };
     }, [currentUser, getUserById]);
 
-    console.log(messageTexts)
 
 
     if (!getUserById || getUserById === null) {
