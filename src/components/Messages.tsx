@@ -86,7 +86,7 @@ const Messages = ({ getUserById, messageUser }: Props) => {
             return
         }
 
-        const fileRef = ref(storage, `${currentUser?.displayName + file}`)
+        const fileRef = ref(storage, `files/${currentUser?.displayName + file}`)
         const messageSenderRef = doc(db, "users", currentUser?.uid!, "chatUser", getUserById!, "messages", getUserById!)
         const messageReceipentRef = doc(db, "users", getUserById!, "chatUser", currentUser?.uid!, "messages", currentUser?.uid!)
 
@@ -131,27 +131,7 @@ const Messages = ({ getUserById, messageUser }: Props) => {
                 <div className="flex flex-row gap-5">
                     <VscDeviceCameraVideo size={35} className="rounded-full bg-gray-200 p-2" />
                     <IoCallOutline size={35} className="rounded-full bg-gray-200 p-2" />
-                    <label htmlFor="image">
-                        <AiOutlinePicture size={35} className="rounded-full bg-gray-200 p-2 cursor-pointer" />
-                    </label>
-                    <input type="file" accept="image/*" id="image" style={{ display: "none" }}
-                        onChange={(e) => {
-                            if (e.target.files) {
-                                setFile(e.target.files[0])
-                            }
-                        }}
-                    />
 
-                    <label htmlFor="video">
-                        <AiOutlinePaperClip size={35} className="rounded-full bg-gray-200 p-2 cursor-pointer" />
-                    </label>
-                    <input type="file" accept="video/*" id="video" style={{ display: "none" }}
-                        onChange={(e) => {
-                            if (e.target.files) {
-                                setFile(e.target.files[0])
-                            }
-                        }}
-                    />
                 </div>
 
             </div>
@@ -170,8 +150,33 @@ const Messages = ({ getUserById, messageUser }: Props) => {
 
             </div>
             <div className="h-[15%] w-full flex items-center mb-2 relative">
-                <input type="text" className="border-2 border-gray-300 w-full h-14 rounded-xl active:border-2 focus:border-gray-500 focus:outline-none pr-16 pl-5 text-xl" value={text} onChange={(e) => setText(e.target.value)} />
-                <BsFillSendFill size={35} className="rounded-full bg-gray-200 px-[9px] absolute right-5 cursor-pointer" onClick={handleSendMessage} values={text} />
+                <input type="text" className="border-2 border-gray-300 w-full h-14 rounded-xl active:border-2 focus:border-gray-500 focus:outline-none pr-[9rem] pl-5 text-xl" value={text} onChange={(e) => setText(e.target.value)} />
+
+                <label htmlFor="image">
+                    <AiOutlinePicture size={35} className="rounded-full bg-gray-200 px-[9px] absolute right-[52px]
+                    bottom-[25px] cursor-pointer" />
+                </label>
+                <input type="file" accept="image/*" id="image" style={{ display: "none" }}
+                    onChange={(e) => {
+                        if (e.target.files) {
+                            setFile(e.target.files[0])
+                        }
+                    }}
+                />
+
+                <label htmlFor="video">
+                    <AiOutlinePaperClip size={35} className="rounded-full bg-gray-200 px-[9px] absolute right-24
+                    bottom-[25px] cursor-pointer" />
+                </label>
+                <input type="file" accept="video/*" id="video" style={{ display: "none" }}
+                    onChange={(e) => {
+                        if (e.target.files) {
+                            setFile(e.target.files[0])
+                        }
+                    }}
+                />
+
+                <BsFillSendFill size={35} className="rounded-full bg-gray-200 px-[9px] absolute right-2 cursor-pointer" onClick={handleSendMessage} values={text} />
             </div>
         </div>
     )
