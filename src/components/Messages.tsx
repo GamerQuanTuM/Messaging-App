@@ -2,10 +2,12 @@ import { MessageUserProps } from "../pages/Home"
 import { VscDeviceCameraVideo } from "react-icons/vsc"
 import { IoCallOutline } from "react-icons/io5"
 import { BsFillSendFill } from "react-icons/bs"
+import { AiOutlinePicture, AiOutlinePaperClip } from "react-icons/ai"
 import { Timestamp, arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore"
-import { db } from "../firebase"
+import { db, storage } from "../firebase"
 import useAuthStore from "../store/Auth"
 import { useEffect, useState, useRef } from "react"
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 
 type Props = {
     getUserById: string | null,
@@ -22,9 +24,10 @@ type TextMessage = {
 
 const Messages = ({ getUserById, messageUser }: Props) => {
     const { currentUser } = useAuthStore()
-    const ref = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     const [text, setText] = useState("")
+    const [file, setFile] = useState<File | null>(null)
     const [messageTexts, setMessageTexts] = useState<TextMessage[]>([]);
 
     useEffect(() => {
@@ -57,10 +60,8 @@ const Messages = ({ getUserById, messageUser }: Props) => {
     }, [currentUser, getUserById]);
 
     useEffect(() => {
-        ref.current?.scrollIntoView({ behavior: "smooth" });
+        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messageTexts]);
-
-
 
 
     if (!getUserById || getUserById === null) {
@@ -75,8 +76,30 @@ const Messages = ({ getUserById, messageUser }: Props) => {
         if (!text.trim()) {
             return; // Don't send empty messages
         }
+
+        if (!file) {
+            return;
+        }
+
+        if (!currentUser?.displayName) {
+            console.error("Something went wrong");
+            return
+        }
+
+        const fileRef = ref(storage, `${currentUser?.displayName + file}`)
         const messageSenderRef = doc(db, "users", currentUser?.uid!, "chatUser", getUserById!, "messages", getUserById!)
         const messageReceipentRef = doc(db, "users", getUserById!, "chatUser", currentUser?.uid!, "messages", currentUser?.uid!)
+
+
+        await uploadBytesResumable(fileRef, file).then(() => {
+            getDownloadURL(fileRef).then(async (downloadURL) => {
+                try {
+
+                } catch (error: any) {
+                    console.error(error)
+                }
+            })
+        })
 
         await updateDoc(messageSenderRef, {
             messages: arrayUnion({
@@ -96,7 +119,6 @@ const Messages = ({ getUserById, messageUser }: Props) => {
                 photoURL: messageUser?.photoURL
             })
         })
-
         setText("")
     }
 
@@ -109,13 +131,34 @@ const Messages = ({ getUserById, messageUser }: Props) => {
                 <div className="flex flex-row gap-5">
                     <VscDeviceCameraVideo size={35} className="rounded-full bg-gray-200 p-2" />
                     <IoCallOutline size={35} className="rounded-full bg-gray-200 p-2" />
+                    <label htmlFor="image">
+                        <AiOutlinePicture size={35} className="rounded-full bg-gray-200 p-2 cursor-pointer" />
+                    </label>
+                    <input type="file" accept="image/*" id="image" style={{ display: "none" }}
+                        onChange={(e) => {
+                            if (e.target.files) {
+                                setFile(e.target.files[0])
+                            }
+                        }}
+                    />
+
+                    <label htmlFor="video">
+                        <AiOutlinePaperClip size={35} className="rounded-full bg-gray-200 p-2 cursor-pointer" />
+                    </label>
+                    <input type="file" accept="video/*" id="video" style={{ display: "none" }}
+                        onChange={(e) => {
+                            if (e.target.files) {
+                                setFile(e.target.files[0])
+                            }
+                        }}
+                    />
                 </div>
 
             </div>
             <hr className="" />
             <div className="flex-1 overflow-y-auto scrollbar mt-5">
                 {messageTexts?.map((message: TextMessage, i: number) => (
-                    <div key={i} className={message.senderId === currentUser?.uid ? 'sent' : 'received mt-[10px]'}  ref={ref}>
+                    <div key={i} className={message.senderId === currentUser?.uid ? 'sent' : 'received mt-[10px]'} ref={scrollRef}>
                         <div className="message-container relative">
                             <img src={message.senderId === currentUser?.uid ? currentUser?.photoURL! : messageUser?.photoURL} className="user-image" alt="User" />
                             {message?.senderId === getUserById && <p className="text-[10px] text-[#9ba2a8] absolute left-[70px] -top-2">{message?.timestamp.toDate().toLocaleDateString()} {message?.timestamp.toDate().toLocaleTimeString()}</p>}
