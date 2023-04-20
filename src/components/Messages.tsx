@@ -109,9 +109,10 @@ const Messages = ({ getUserById, messageUser }: Props) => {
             <hr className="" />
             <div className="flex-1 overflow-y-auto scrollbar mt-5">
                 {messageTexts?.map((message: TextMessage, i: number) => (
-                    <div key={i} className={message.senderId === currentUser?.uid ? 'sent' : 'received'}>
-                        <div className="message-container">
+                    <div key={i} className={message.senderId === currentUser?.uid ? 'sent' : 'received mt-[10px]'}>
+                        <div className="message-container relative">
                             <img src={message.senderId === currentUser?.uid ? currentUser?.photoURL! : messageUser?.photoURL} className="user-image" alt="User" />
+                            {message?.senderId === getUserById && <p className="text-[10px] text-[#9ba2a8] absolute left-[70px] -top-2">{message?.timestamp.toDate().toLocaleDateString()} {message?.timestamp.toDate().toLocaleTimeString()}</p>}
                             <div className="message">{message.text}</div>
                         </div>
                     </div>
