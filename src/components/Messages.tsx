@@ -216,9 +216,9 @@ const Messages = ({ getUserById, messageUser }: Props) => {
             <div className="h-[15%] w-full flex items-center mb-2 relative">
                 <input type="text" className={`border-2 border-gray-300 ${isModalOpen ? "bg-neutral-300" : "bg-white"} w-full h-14 rounded-xl active:border-2 focus:border-gray-500 focus:outline-none pr-[6rem] pl-5 text-xl`} value={text} onChange={(e) => setText(e.target.value)} />
 
-                <label htmlFor="image">
-                    <AiOutlinePicture size={35} className="rounded-full bg-gray-200 px-[9px] absolute right-[52px]
-                    bottom-[25px] cursor-pointer" />
+
+                <label htmlFor="image" className="absolute right-[52px]">
+                    <AiOutlinePicture size={35} className="rounded-full bg-gray-200 px-[9px] Xcursor-pointer" />
                 </label>
                 <input type="file" accept="image/*" id="image" style={{ display: "none" }} onChange={handleFileChange} />
 
