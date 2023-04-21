@@ -5,8 +5,7 @@ type Props = {
     handleClose: () => void;
     handleImageSend: () => void;
     handleVideoSend: () => void;
-}
-
+};
 
 const Modal = ({ file, handleClose, handleImageSend, handleVideoSend }: Props) => {
     const [fileType, setFileType] = useState<string | null>(null);
@@ -14,11 +13,11 @@ const Modal = ({ file, handleClose, handleImageSend, handleVideoSend }: Props) =
 
     const handleSend = () => {
         if (file?.type.includes("image")) {
-            handleImageSend()
+            handleImageSend();
         } else if (file?.type.includes("video")) {
-            handleVideoSend()
+            handleVideoSend();
         }
-    }
+    };
 
     useEffect(() => {
         if (file) {
@@ -31,79 +30,45 @@ const Modal = ({ file, handleClose, handleImageSend, handleVideoSend }: Props) =
     }, [file]);
 
     return (
-        <div className="absolute bg-gray-400 h-[450px] w-[600px] bottom-2 -left-5 flex flex-col items-center justify-center gap-4">
-            {fileType?.startsWith('image/') ? (
-                <div>
-                    {fileUrl ? (
-                        <img src={fileUrl} alt="" className="h-[300px] w-[300px]" />
-                    ) : (
-                        <p>No file selected</p>
-                    )}
-                </div>
-            ) : fileType?.startsWith('video/') ? (
-                <div>
-                    {fileUrl ? (
-                        <video src={fileUrl} controls />
-                    ) : (
-                        <p>No file selected</p>
-                    )}
-                </div>
-            ) : (
-                <p>No file selected</p>
-            )}
+        <div className="fixed top-0 left-0 z-50 w-full h-full overflow-y-auto bg-gray-200 bg-opacity-50 flex items-center justify-center">
+            <div className="bg-gray-400 rounded-lg w-full mx-5 md:w-3/4 lg:w-1/2 xl:w-2/5">
+                {fileType?.startsWith("image/") ? (
+                    <div>
+                        {fileUrl ? (
+                            <img src={fileUrl} alt="" className="h-[300px] w-full object-contain mt-5 md:mt-12" />
+                        ) : (
+                            <p>No file selected</p>
+                        )}
+                    </div>
+                ) : fileType?.startsWith("video/") ? (
+                    <div>
+                        {fileUrl ? (
+                            <video src={fileUrl} controls className="w-full" />
+                        ) : (
+                            <p>No file selected</p>
+                        )}
+                    </div>
+                ) : (
+                    <p>No file selected</p>
+                )}
 
-            <div className="flex gap-4 w-full">
-                <button className="bg-red-500 w-full ml-36 p-2 text-white rounded-xl text-xl" onClick={handleClose}>Close</button>
-                <button className="bg-blue-500 w-full mr-36 p-2 text-white rounded-xl text-xl" onClick={handleSend}>Proceed</button>
+                <div className="flex justify-center gap-4 w-full py-4 px-6 md:py-6 md:px-8">
+                    <button
+                        className="bg-red-500 w-full md:w-auto py-2 md:py-3 px-4 md:px-6 text-white rounded-xl text-lg md:text-xl"
+                        onClick={handleClose}
+                    >
+                        Close
+                    </button>
+                    <button
+                        className="bg-blue-500 w-full md:w-auto py-2 md:py-3 px-4 md:px-6 text-white rounded-xl text-lg md:text-xl"
+                        onClick={handleSend}
+                    >
+                        Proceed
+                    </button>
+                </div>
             </div>
         </div>
     );
 };
 
-
-export default Modal
-
-
-
-
-
-// const Modal = ({ file, handleClose, handleSendMessage, handleVideoSend }: Props) => {
-//     const imageUrl = file && file.type.startsWith("image/") ? URL.createObjectURL(file) : null;
-
-//     const videoUrl = file ? URL.createObjectURL(file) : null
-
-//     const handleSend = () => {
-//         if (file?.name.startsWith("image/")) {
-//             handleSendMessage()
-//         } else {
-//             handleVideoSend()
-//         }
-//     }
-
-//     return (
-//         <div className="absolute bg-gray-400 h-[450px] w-[600px] bottom-2 -left-5 flex flex-col items-center justify-center gap-4">
-//             {file?.name.startsWith("image/") ?
-//                 <div>
-//                     {imageUrl ? (
-//                         <img src={imageUrl} alt="" className="h-[300px] w-[300px]" />
-//                     ) : (
-//                         <p>No file selected</p>
-//                     )}
-//                 </div>
-//                 :
-//                 <div>
-//                     <video src={videoUrl || ""} controls />
-//                 </div>
-//             }
-
-
-//             <div className="flex gap-4 w-full">
-//                 <button className="bg-red-500 w-full ml-36 p-2 text-white rounded-xl text-xl" onClick={handleClose}>Close</button>
-//                 <button className="bg-blue-500 w-full mr-36 p-2 text-white rounded-xl text-xl" onClick={handleSend}>Proceed</button>
-//             </div>
-//         </div >
-//     );
-// };
-
-
-// export default Modal
+export default Modal;
