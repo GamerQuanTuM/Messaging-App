@@ -132,7 +132,7 @@ const SearchUser = ({ setGetUserById, setMessageUser }: Props) => {
                 <input
                     type="text"
                     placeholder="Search A User"
-                    className="bg-[#303841] text-white px-5  rounded-2xl md:w-[170px] outline-none h-8 w-[100px]"
+                    className="bg-[#303841] text-white px-5  rounded-2xl outline-none h-8 w-[150px]"
                     onChange={(e) => setSearchUsername(e.target.value)}
                     value={searchUsername}
                 />
