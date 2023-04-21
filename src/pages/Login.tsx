@@ -52,9 +52,12 @@ const Login = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex -mx-3">
+              <div className="flex -mx-3 flex-col">
                 <div className="w-full px-3 mb-5">
                   <button className="block w-full max-w-xs mx-auto bg-[#1e7faa] hover:bg-[#014670] focus:bg-[#014670] text-white rounded-lg px-3 py-3 font-semibold">LOGIN</button>
+                </div>
+                <div className="flex justify-center mt-1 gap-1">
+                  Not a member?<span className="cursor-pointer underline" onClick={() => navigate("/register")}>Sign up now</span>
                 </div>
               </div>
             </div>

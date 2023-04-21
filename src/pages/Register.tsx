@@ -1,9 +1,9 @@
-import { FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useState } from "react"
 import Bg from "../assets/bg.jpg"
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
-import { auth, db, storage, app } from "../firebase"
+import { auth, db, storage } from "../firebase"
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
-import { collection, doc, setDoc } from "firebase/firestore"
+import { doc, setDoc } from "firebase/firestore"
 import { useNavigate } from "react-router-dom"
 
 const Register = () => {
@@ -12,11 +12,11 @@ const Register = () => {
   const [firstName, setFirstName] = useState<string>("")
   const [lastName, setLastName] = useState<string>("")
   const [image, setImage] = useState<null | File | any>(null)
-  const [error, setError] = useState(false)
+  const [_, setError] = useState(false)
 
   const navigate = useNavigate()
 
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
       console.error("Select a file");
       return;
@@ -112,7 +112,7 @@ const Register = () => {
                   <label htmlFor="" className="text-xs font-semibold px-1">Password</label>
                   <div className="flex">
                     <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
-                    <input type="password" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" autoComplete="************" onChange={(e) => setPassword(e.target.value)} />
+                    <input type="password" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************" onChange={(e) => setPassword(e.target.value)} />
                   </div>
                 </div>
               </div>
@@ -125,9 +125,12 @@ const Register = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex -mx-3">
+              <div className="flex -mx-3 flex-col">
                 <div className="w-full px-3 mb-5">
                   <button className="block w-full max-w-xs mx-auto bg-[#1e7faa] hover:bg-[#014670] focus:bg-[#014670] text-white rounded-lg px-3 py-3 font-semibold">REGISTER NOW</button>
+                </div>
+                <div className="flex justify-center mt-1 gap-1">
+                  Already have an account?<span className="cursor-pointer underline" onClick={() => navigate("/login")}>Login</span>
                 </div>
               </div>
             </div>
