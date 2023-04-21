@@ -14,7 +14,7 @@ const Home = () => {
 
   return (
     <div className='bg-form gray-900 h-screen w-screen flex items-center justify-center'>
-      <div className="h-[80%] w-[70%] drop-shadow-lg border-2 border-gray-500 rounded-xl flex flex-row overflow-hidden">
+      <div className="w-full h-full md:h-[80%] md:w-[70%] drop-shadow-lg border-2 border-gray-500 md:rounded-xl rounded-none flex flex-row overflow-hidden">
         <Chats setGetUserById={setGetUserById} setMessageUser={setMessageUser} />
         <Messages getUserById={getUserById} messageUser={messageUser} />
       </div>

@@ -19,8 +19,8 @@ const Chats = ({ setGetUserById, setMessageUser }: Props) => {
         await signOut(auth)
     }
     return (
-        <div className='w-[30%] h-full bg-[#363e47] flex'>
-            <div className='bg-[#303841] w-[20%] py-10 flex flex-col justify-between'>
+        <div className='md:w-[30%] h-full bg-[#363e47] flex w-[35%]'>
+            <div className='bg-[#303841] md:w-[20%] w-[40%] py-10 md:flex md:flex-col justify-between hidden'>
                 <img src={currentUser?.photoURL!} alt="Profile-Pic" className='w-12 h-12 rounded-full mx-auto' />
                 <MdLogout size={30} color="#86939f" className="mx-auto cursor-pointer" onClick={handleLogout} />
             </div>

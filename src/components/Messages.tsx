@@ -247,9 +247,9 @@ const Messages = ({ getUserById, messageUser }: Props) => {
                             {message?.text && <div className="message mt-2">{message.text}
                             </div>
                             }
-                            {message?.mediaURL && <img src={message?.mediaURL} alt="image" className="w-[200px] h-[200px] mt-2" />}
+                            {message?.mediaURL && <img src={message?.mediaURL} alt="image" className="w-[300px] h-[300px] mt-2" />}
 
-                            {message?.videoURL && <video src={message?.videoURL} className="w-[650px] h-[400px] mt-2" controls />}
+                            {message?.videoURL && <video src={message?.videoURL} className="md:w-[650px] md:h-[400px] w-[300px] h-[300px] mt-2" controls />}
                         </div>
                     </div>
                 ))}

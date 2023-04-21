@@ -1,9 +1,11 @@
 import { DocumentData, collection, doc, getDocs, onSnapshot, query, serverTimestamp, setDoc, where } from 'firebase/firestore'
 import { Dispatch, SetStateAction, useState, useEffect } from 'react'
 import { GrFormAdd } from "react-icons/gr"
-import { db } from '../firebase'
+import { auth, db } from '../firebase'
 import useAuthStore from '../store/Auth'
 import { MessageUserProps } from '../pages/Home'
+import { MdLogout } from 'react-icons/md'
+import { signOut } from 'firebase/auth'
 
 type SearchProps = {
     displayName: string;
@@ -114,10 +116,19 @@ const SearchUser = ({ setGetUserById, setMessageUser }: Props) => {
         fetchData();
     }, [user]);
 
+    const handleLogout = async () => {
+        await signOut(auth)
+    }
+
 
     return (
         <div className='flex-1 flex flex-col gap-5'>
-            <div className="pl-3 flex mt-5 gap-5">
+            <div className='flex md:hidden mt-5 mx-5 gap-5 items-center'>
+                <img src={currentUser?.photoURL!} className='w-8 h-8 rounded-full' />
+                <p className='text-white'>{currentUser?.displayName}</p>
+                <MdLogout size={20} color="#86939f" className="mx-auto cursor-pointer" onClick={handleLogout} />
+            </div>
+            <div className="pl-3 flex md:mt-5 gap-5 mt-0">
                 <input
                     type="text"
                     placeholder="Search A User"
