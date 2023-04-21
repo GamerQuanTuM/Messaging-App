@@ -21,6 +21,7 @@ type TextMessage = {
     senderId: string;
     text?: string;
     mediaURL?: string;
+    videoURL?: string;
     timestamp: Timestamp
 }
 
@@ -94,6 +95,48 @@ const Messages = ({ getUserById, messageUser }: Props) => {
         handleShow();
     };
 
+    const handleVideoSend = async () => {
+        if (!file) return
+        if (!currentUser?.displayName || !currentUser) {
+            console.error("Something went wrong");
+            return;
+        }
+
+        const messageSenderRef = doc(db, "users", currentUser?.uid, "chatUser", getUserById, "messages", getUserById);
+        const messageReceipentRef = doc(db, "users", getUserById, "chatUser", currentUser?.uid, "messages", currentUser?.uid);
+
+        const fileRef = ref(storage, `videos/${currentUser?.displayName + Date.now()}`);
+        await uploadBytesResumable(fileRef, file).then(() => {
+            getDownloadURL(fileRef).then(async (downloadURL) => {
+                try {
+                    await updateDoc(messageSenderRef, {
+                        messages: arrayUnion({
+                            senderId: currentUser?.uid,
+                            senderDisplayName: currentUser?.displayName,
+                            timestamp: Timestamp.now(),
+                            photoURL: messageUser?.photoURL,
+                            videoURL: downloadURL,
+                        }),
+                    });
+                    await updateDoc(messageReceipentRef, {
+                        messages: arrayUnion({
+                            senderId: currentUser?.uid,
+                            senderDisplayName: currentUser?.displayName,
+                            timestamp: Timestamp.now(),
+                            photoURL: messageUser?.photoURL,
+                            videoURL: downloadURL,
+                        }),
+                    });
+                } catch (error: any) {
+                    console.error(error);
+                }
+            });
+        });
+
+        setFile(null)
+        handleClose()
+    }
+
     const handleImageSend = async () => {
 
         if (!file) return
@@ -105,8 +148,6 @@ const Messages = ({ getUserById, messageUser }: Props) => {
 
         const messageSenderRef = doc(db, "users", currentUser?.uid, "chatUser", getUserById, "messages", getUserById!);
         const messageReceipentRef = doc(db, "users", getUserById, "chatUser", currentUser?.uid, "messages", currentUser?.uid);
-
-
 
         const fileRef = ref(storage, `files/${currentUser?.displayName + Date.now()}`);
         await uploadBytesResumable(fileRef, file).then(() => {
@@ -149,8 +190,8 @@ const Messages = ({ getUserById, messageUser }: Props) => {
             console.error("Something went wrong");
             return;
         }
-        const messageSenderRef = doc(db, "users", currentUser?.uid!, "chatUser", getUserById!, "messages", getUserById!);
-        const messageReceipentRef = doc(db, "users", getUserById!, "chatUser", currentUser?.uid!, "messages", currentUser?.uid!);
+        const messageSenderRef = doc(db, "users", currentUser?.uid, "chatUser", getUserById, "messages", getUserById);
+        const messageReceipentRef = doc(db, "users", getUserById, "chatUser", currentUser?.uid, "messages", currentUser?.uid);
 
         try {
             await updateDoc(messageSenderRef, {
@@ -178,7 +219,7 @@ const Messages = ({ getUserById, messageUser }: Props) => {
     };
 
 
-
+    console.log(file)
 
     return (
         <div className={`flex-1 ${isModalOpen ? "bg-neutral-300" : "bg-white"} px-6  flex flex-col`} onClick={handleClose}>
@@ -207,6 +248,8 @@ const Messages = ({ getUserById, messageUser }: Props) => {
                             </div>
                             }
                             {message?.mediaURL && <img src={message?.mediaURL} alt="image" className="w-[200px] h-[200px] mt-2" />}
+
+                            {message?.videoURL && <video src={message?.videoURL} className="w-[650px] h-[400px] mt-2" controls />}
                         </div>
                     </div>
                 ))}
@@ -222,10 +265,15 @@ const Messages = ({ getUserById, messageUser }: Props) => {
                 </label>
                 <input type="file" accept="image/*" id="image" style={{ display: "none" }} onChange={handleFileChange} />
 
+                <label htmlFor="video" className="absolute right-[96px]">
+                    <AiOutlinePaperClip size={35} className="rounded-full bg-gray-200 px-[9px] cursor-pointer" />
+                </label>
+                <input type="file" accept="video/*" id="video" style={{ display: "none" }} onChange={handleFileChange} />
+
                 <BsFillSendFill size={35} className="rounded-full bg-gray-200 px-[9px] absolute right-2 cursor-pointer" onClick={handleSendMessage} values={text} />
             </div>
             <div className="relative">
-                {isModalOpen && <Modal file={file} handleClose={handleClose} handleSendMessage={handleImageSend} />}
+                {isModalOpen && <Modal file={file} handleClose={handleClose} handleImageSend={handleImageSend} handleVideoSend={handleVideoSend} />}
             </div>
         </div>
     )
