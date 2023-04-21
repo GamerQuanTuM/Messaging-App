@@ -6,13 +6,16 @@ import { AiOutlinePicture, AiOutlinePaperClip } from "react-icons/ai"
 import { Timestamp, arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore"
 import { db, storage } from "../firebase"
 import useAuthStore from "../store/Auth"
-import { useEffect, useState, useRef, ChangeEvent } from "react"
+import { useEffect, useState, useRef, ChangeEvent, Dispatch, SetStateAction } from "react"
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import Modal from "./Modal"
+import { GiHamburgerMenu } from "react-icons/gi"
 
 type Props = {
     getUserById: string | null,
-    messageUser: MessageUserProps | null
+    messageUser: MessageUserProps | null,
+    setIsChatOpenUser: Dispatch<SetStateAction<boolean>>
+    isChatUserOpen: boolean
 }
 
 type TextMessage = {
@@ -25,7 +28,7 @@ type TextMessage = {
     timestamp: Timestamp
 }
 
-const Messages = ({ getUserById, messageUser }: Props) => {
+const Messages = ({ getUserById, messageUser, setIsChatOpenUser, isChatUserOpen }: Props) => {
     const { currentUser } = useAuthStore()
     const scrollRef = useRef<HTMLDivElement>(null);
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -77,11 +80,19 @@ const Messages = ({ getUserById, messageUser }: Props) => {
 
     if (!getUserById || getUserById === null) {
         return (
-            <div className='flex-1 bg-white h-full w-full flex items-center justify-center'>
-                <p className='text-[#8c9399] text-2xl font-light'>Select a user to start chatting</p>
-            </div>
+            <>
+                <div className='flex-1 bg-white h-full w-full flex items-center justify-center' onClick={() => setIsChatOpenUser(false)}>
+                    <div className="absolute top-0 bg-white left-5 pt-5 cursor-pointer" onClick={(event) => { event.stopPropagation(); setIsChatOpenUser(prevState => !prevState) }}>
+                        <GiHamburgerMenu size={25} />
+                    </div>
+                    <div className='text-center'>
+                        <p className='text-[#8c9399] text-2xl font-light'>Select a user to start chatting</p>
+                    </div>
+                </div>
+            </>
         )
     }
+
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0];
@@ -218,12 +229,18 @@ const Messages = ({ getUserById, messageUser }: Props) => {
         setText("");
     };
 
+    const handleClick = () => {
+        handleClose()
+        setIsChatOpenUser(false)
+    }
 
-    console.log(file)
 
     return (
-        <div className={`flex-1 ${isModalOpen ? "bg-neutral-300" : "bg-white"} px-6  flex flex-col`} onClick={handleClose}>
+        <div className={`flex-1 ${isModalOpen ? "bg-neutral-300" : "bg-white"} px-6  flex flex-col`} onClick={handleClick}>
             <div className="h-[15%] w-full flex flex-row justify-between items-center">
+                <div className="block md:hidden bg-white cursor-pointer" onClick={(event) => { event.stopPropagation(); setIsChatOpenUser(prevState => !prevState) }}>
+                    <GiHamburgerMenu size={25} />
+                </div>
                 <div className="font-extrabold text-xl">{messageUser?.displayName}</div>
                 <div className="flex flex-row gap-5">
                     <VscDeviceCameraVideo size={35} className="rounded-full bg-gray-200 p-2" />
@@ -249,7 +266,8 @@ const Messages = ({ getUserById, messageUser }: Props) => {
                             }
                             {message?.mediaURL && <img src={message?.mediaURL} alt="image" className="w-[300px] h-[300px] mt-2" />}
 
-                            {message?.videoURL && <video src={message?.videoURL} className="md:w-[650px] md:h-[400px] w-[300px] h-[300px] mt-2" controls />}
+                            {message?.videoURL && <video src={message?.videoURL} className="md:w-[350px] md:h-[300px] w-[300px] h-[300px] 
+                            lg:w-[650px] xl:h-[400px] mt-2" controls />}
                         </div>
                     </div>
                 ))}

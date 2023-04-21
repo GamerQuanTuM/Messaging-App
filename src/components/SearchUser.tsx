@@ -125,21 +125,21 @@ const SearchUser = ({ setGetUserById, setMessageUser }: Props) => {
         <div className='flex-1 flex flex-col gap-5'>
             <div className='flex md:hidden mt-5 mx-5 gap-5 items-center'>
                 <img src={currentUser?.photoURL!} className='w-8 h-8 rounded-full' />
-                <p className='text-white'>{currentUser?.displayName}</p>
+                <p className='text-xs text-white'>{currentUser?.displayName}</p>
                 <MdLogout size={20} color="#86939f" className="mx-auto cursor-pointer" onClick={handleLogout} />
             </div>
             <div className="pl-3 flex md:mt-5 gap-5 mt-0">
                 <input
                     type="text"
                     placeholder="Search A User"
-                    className="bg-[#303841] text-white px-5  rounded-2xl w-[170px] outline-none h-8"
+                    className="bg-[#303841] text-white px-5  rounded-2xl md:w-[170px] outline-none h-8 w-[100px]"
                     onChange={(e) => setSearchUsername(e.target.value)}
                     value={searchUsername}
                 />
                 <GrFormAdd
                     size={25}
                     color="#49535d"
-                    className="bg-[#303841] rounded-full h-8 w-8 p-1 cursor-pointer"
+                    className="bg-[#303841] rounded-full h-8 w-8 p-1 cursor-pointer mr-[6px] md:mr-0"
                     values={searchUsername}
                     onClick={handleSearch}
                 />
