@@ -265,7 +265,9 @@ const Messages = ({ getUserById, messageUser, setIsChatOpenUser, isChatUserOpen 
                             </div>
                             }
                             {message?.mediaURL && <img src={message?.mediaURL} alt="image" className="w-[300px] h-[300px] mt-2" />}
-                            {message?.videoURL && <video src={message?.videoURL} className="w-[650px] h-[400px] mt-2" controls />}
+
+                            {message?.videoURL && <video src={message?.videoURL} className="md:w-[350px] md:h-[300px] w-[270px] h-[400px] 
+                            lg:w-[650px] xl:h-[400px] mt-2" controls />}
                         </div>
                     </div>
                 ))}
