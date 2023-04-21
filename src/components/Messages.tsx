@@ -199,7 +199,7 @@ const Messages = ({ getUserById, messageUser }: Props) => {
                             <img src={message.senderId === currentUser?.uid ? currentUser?.photoURL! : messageUser?.photoURL} className="user-image" alt="User" />
                             {message?.senderId === getUserById &&
                                 <p className="text-[10px] text-[#9ba2a8] absolute left-[70px] -top-2">
-                                    {message?.timestamp.toDate().toLocaleDateString()}
+                                    {message?.timestamp.toDate().toLocaleDateString()} {" "}
                                     {message?.timestamp.toDate().toLocaleTimeString()}
                                 </p>
                             }
