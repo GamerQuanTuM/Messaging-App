@@ -218,7 +218,7 @@ const Messages = ({ getUserById, messageUser }: Props) => {
 
 
                 <label htmlFor="image" className="absolute right-[52px]">
-                    <AiOutlinePicture size={35} className="rounded-full bg-gray-200 px-[9px] Xcursor-pointer" />
+                    <AiOutlinePicture size={35} className="rounded-full bg-gray-200 px-[9px] cursor-pointer" />
                 </label>
                 <input type="file" accept="image/*" id="image" style={{ display: "none" }} onChange={handleFileChange} />
 
