@@ -275,7 +275,7 @@ const Messages = ({ getUserById, messageUser, setIsChatOpenUser, isChatUserOpen 
 
             </div>
             <div className="h-[15%] w-full flex items-center mb-2 relative">
-                <input type="text" className={`border-2 border-gray-300 ${isModalOpen ? "bg-neutral-300" : "bg-white"} w-full h-14 rounded-xl active:border-2 focus:border-gray-500 focus:outline-none pr-[6rem] pl-5 text-xl`} value={text} onChange={(e) => setText(e.target.value)} />
+                <input type="text" className={`border-2 border-gray-300 ${isModalOpen ? "bg-neutral-300" : "bg-white"} w-full h-14 rounded-xl active:border-2 focus:border-gray-500 focus:outline-none pr-[9rem] pl-5 text-xl`} value={text} onChange={(e) => setText(e.target.value)} />
 
 
                 <label htmlFor="image" className="absolute right-[52px]">
