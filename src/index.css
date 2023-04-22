@@ -22,7 +22,7 @@ body {
 .message-container {
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 .sent .message-container {
